@@ -46,6 +46,28 @@ ecosort/
 
 ---
 
+## Fluxo de Dados
+
+```mermaid
+flowchart LR
+    A[ Garbage Dataset\nImagens Batch] -->|ingestão| B[Ingestão Batch\nPython]
+    C[ Câmeras Simuladas\nda Esteira] -->|eventos| D[Kafka Local]
+
+    B --> E[(Bronze\nMinIO)]
+    D --> E
+
+    E --> F[Processamento\nPySpark]
+    F --> G[Classificação ML\nReciclável / Não Reciclável]
+    G --> H[(Silver\nDados Limpos e Validados)]
+
+    H --> I[dbt\nTransformações de Negócio]
+    I --> J[(Gold\nIndicadores Operacionais)]
+
+    J --> K[Metabase]
+    J --> L[API]
+```
+
+
 ## Stack Tecnológica
 
 | Etapa | Tecnologia |
