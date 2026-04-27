@@ -4,7 +4,7 @@
 
 **Integrantes:**
 - Leonardo Amaral — Matrícula: XXXXXXX
-- Tatiana Hanada — Matrícula: 22301398
+- Tatiana Hanadda — Matrícula: 22301398
 
 ---
 
@@ -50,8 +50,8 @@ ecosort/
 
 ```mermaid
 flowchart LR
-    A[ Garbage Dataset\nImagens Batch] -->|ingestão| B[Ingestão Batch\nPython]
-    C[ Câmeras Simuladas\nda Esteira] -->|eventos| D[Kafka Local]
+    A[Garbage Dataset\nImagens Batch] -->|ingestão| B[Ingestão Batch\nPython]
+    C[Câmeras Simuladas\nda Esteira] -->|eventos| D[Kafka Local]
 
     B --> E[(Bronze\nMinIO)]
     D --> E
@@ -67,6 +67,7 @@ flowchart LR
     J --> L[API]
 ```
 
+---
 
 ## Stack Tecnológica
 
@@ -74,11 +75,11 @@ flowchart LR
 |---|---|
 | Ingestão Batch | Python |
 | Ingestão Streaming | Apache Kafka (local) |
-| Armazenamento | MinIO + Delta Lake / Apache Iceberg |
+| Armazenamento | MinIO + Delta Lake |
 | Processamento | PySpark |
 | Qualidade de Dados | Great Expectations |
 | Transformação Analítica | dbt |
-| Orquestração | Prefect ou Airflow |
+| Orquestração | Prefect |
 | Consumo | Metabase + API |
 
-> Toda a stack roda localmente via **Docker Compose**, sem dependência de serviços em nuvem pagos.
+> Toda a stack roda localmente via Docker Compose, sem dependência de serviços em nuvem pagos.
