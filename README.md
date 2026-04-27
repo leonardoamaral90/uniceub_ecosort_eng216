@@ -1,31 +1,62 @@
-# EcoSort
+# ♻️ EcoSort — Protótipo de Ciclo de Vida de Engenharia de Dados
 
-Protótipo de ciclo de vida de engenharia de dados para classificação inteligente de resíduos urbanos.
+> Classificação Inteligente de Resíduos Urbanos
 
-## Objetivo
+**Integrantes:**
+- Leonardo Amaral — Matrícula: XXXXXXX
+- Tatiana Hanada — Matrícula: 22301398
 
-Simular uma arquitetura de dados capaz de ingerir imagens e eventos de esteiras de triagem, classificar resíduos como recicláveis ou não recicláveis, armazenar os dados em um Lakehouse com arquitetura Medalhão e disponibilizar indicadores operacionais em dashboards.
+---
 
-## Arquitetura
+## Sobre o Projeto
 
-O projeto utiliza uma arquitetura Lakehouse com camadas Bronze, Silver e Gold.
+O EcoSort é um protótipo de ciclo de vida de engenharia de dados voltado para a classificação automática de resíduos sólidos em recicláveis e não recicláveis, com o objetivo de apoiar operações de coleta seletiva em municípios ou cooperativas de triagem.
 
-- Bronze: dados brutos.
-- Silver: dados limpos, classificados e validados.
-- Gold: indicadores de negócio.
+A partir de imagens de resíduos domésticos, o pipeline processa, classifica e gera indicadores operacionais para gestores de coleta, utilizando uma arquitetura Lakehouse com padrão Medalhão (Bronze → Silver → Gold).
 
-## Tecnologias previstas
+---
 
-- Python
-- Apache Kafka
-- MinIO
-- Delta Lake ou Apache Iceberg
-- PySpark
-- dbt
-- Prefect ou Airflow
-- Great Expectations
-- Metabase ou Apache Superset
+## Estrutura do Repositório
 
-## Domínio do problema
+```
+ecosort/
+│
+├── README.md
+└── docs/
+    ├── 01-descricao-projeto.md
+    ├── 02-definicao-dados.md
+    ├── 03-dominios-servicos.md
+    ├── 04-arquitetura.md
+    ├── 05-tecnologias.md
+    └── 06-consideracoes-finais.md
+```
 
-O projeto simula o backend de dados de um sistema de triagem automática instalado em esteiras de separação de resíduos. Câmeras capturam imagens dos itens em tempo real, um modelo de ML os classifica, e o pipeline de dados processa, armazena e disponibiliza os resultados para os gestores.
+---
+
+## Navegação Rápida
+
+| Documento | Conteúdo |
+|---|---|
+| [01 - Descrição do Projeto](docs/01-descricao-projeto.md) | Contexto, problema, stakeholders |
+| [02 - Definição dos Dados](docs/02-definicao-dados.md) | Fontes, formatos, classificação batch/streaming |
+| [03 - Domínios e Serviços](docs/03-dominios-servicos.md) | Domínios de negócio e responsabilidades |
+| [04 - Arquitetura](docs/04-arquitetura.md) | Fluxo de dados ponta a ponta, diagramas |
+| [05 - Tecnologias](docs/05-tecnologias.md) | Stack escolhida e justificativas |
+| [06 - Considerações Finais](docs/06-consideracoes-finais.md) | Riscos, limitações e próximos passos |
+
+---
+
+## Stack Tecnológica
+
+| Etapa | Tecnologia |
+|---|---|
+| Ingestão Batch | Python |
+| Ingestão Streaming | Apache Kafka (local) |
+| Armazenamento | MinIO + Delta Lake / Apache Iceberg |
+| Processamento | PySpark |
+| Qualidade de Dados | Great Expectations |
+| Transformação Analítica | dbt |
+| Orquestração | Prefect ou Airflow |
+| Consumo | Metabase + API |
+
+> Toda a stack roda localmente via **Docker Compose**, sem dependência de serviços em nuvem pagos.
