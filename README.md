@@ -1,4 +1,4 @@
-# ♻️ EcoSort — Protótipo de Ciclo de Vida de Engenharia de Dados
+# EcoSort — Protótipo de Ciclo de Vida de Engenharia de Dados
 
 > Classificação Inteligente de Resíduos Urbanos
 
