@@ -37,12 +37,12 @@ ecosort/
 
 | Documento | Conteúdo |
 |---|---|
-| [01 - Descrição do Projeto](docs/01-descricao-projeto.md) | Contexto, problema, stakeholders |
-| [02 - Definição dos Dados](docs/02-definicao-dados.md) | Fontes, formatos, classificação batch/streaming |
-| [03 - Domínios e Serviços](docs/03-dominios-servicos.md) | Domínios de negócio e responsabilidades |
-| [04 - Arquitetura](docs/04-arquitetura.md) | Fluxo de dados ponta a ponta, diagramas |
-| [05 - Tecnologias](docs/05-tecnologias.md) | Stack escolhida e justificativas |
-| [06 - Considerações Finais](docs/06-consideracoes-finais.md) | Riscos, limitações e próximos passos |
+| [01 - Descrição do Projeto](https://github.com/leonardoamaral90/uniceub_ecosort_eng216/blob/main/docs/01-descricao.md) | Contexto, problema, stakeholders |
+| [02 - Definição dos Dados](https://github.com/leonardoamaral90/uniceub_ecosort_eng216/blob/main/docs/02-dados.md) | Fontes, formatos, classificação batch/streaming |
+| [03 - Domínios e Serviços](https://github.com/leonardoamaral90/uniceub_ecosort_eng216/blob/main/docs/03-dominios.md) | Domínios de negócio e responsabilidades |
+| [04 - Arquitetura](https://github.com/leonardoamaral90/uniceub_ecosort_eng216/blob/main/docs/04-arquitetura.md) | Fluxo de dados ponta a ponta, diagramas |
+| [05 - Tecnologias](https://github.com/leonardoamaral90/uniceub_ecosort_eng216/blob/main/docs/05-tecnologias.md) | Stack escolhida e justificativas |
+| [06 - Considerações Finais](https://github.com/leonardoamaral90/uniceub_ecosort_eng216/blob/main/docs/06-consideracoes.md) | Riscos, limitações e próximos passos |
 
 ---
 
