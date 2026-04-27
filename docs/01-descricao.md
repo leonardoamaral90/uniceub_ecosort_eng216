@@ -53,7 +53,7 @@ A partir das 10 classes do Garbage Dataset:
 | Trash | 453 | Não Reciclável |
 | Shoes | 1.449 | Não Reciclável |
 | Clothes | 1.892 | Não Reciclável |
-| **Total** | **13.348** | — |
+| **Total** | **12.259** | — |
 
 > Nota: Baterias possuem descarte especial na prática, mas para simplificação do protótipo são tratadas como não recicláveis no fluxo padrão.
 
