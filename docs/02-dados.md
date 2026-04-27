@@ -2,7 +2,7 @@
 
 ## Fonte de Dados
 
-O projeto utiliza como única fonte primária real o Garbage Dataset, disponível publicamente no [Kaggle](https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2) contendo 13.348 imagens divididas em 10 classes de resíduos domésticos.
+O projeto utiliza como única fonte primária real o Garbage Dataset, disponível publicamente no [Kaggle](https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2) contendo 12.259 imagens divididas em 10 classes de resíduos domésticos.
 
 Todos os metadados e eventos de streaming são gerados sinteticamente pelo próprio pipeline, o que é explicitamente documentado como prática comum em protótipos de engenharia de dados.
 
@@ -16,7 +16,7 @@ Todos os metadados e eventos de streaming são gerados sinteticamente pelo próp
 |---|---|
 | Origem | Garbage Dataset (Kaggle) |
 | Formato | Imagens JPEG/PNG organizadas em subpastas por classe |
-| Volume | ~13.348 arquivos de imagem |
+| Volume | 12.259 arquivos de imagem |
 | Periodicidade | Ingestão única (histórico) + re-ingestão simulando novos lotes por turno |
 | Latência esperada | Alta — processamento em lote, sem exigência de tempo real |
 | Metadados gerados | `image_id`, `class_label`, `recyclable` (booleano), `file_size_kb`, `ingestion_timestamp`, `batch_id` |
@@ -65,7 +65,7 @@ O producer sorteia imagens do dataset e publica eventos no tópico Kafka `residu
 
 ```mermaid
 graph TD
-    A[Garbage Dataset\nKaggle — 13.348 imagens JPEG] -->|leitura em lote| B[Ingestão Batch\nPython]
+    A[Garbage Dataset\nKaggle — 12.259 imagens JPEG] -->|leitura em lote| B[Ingestão Batch\nPython]
     C[Producer Python\nSimulação de câmera] -->|eventos JSON| D[Kafka\nresiduos-eventos]
 
     B -->|Parquet + imagens| E[(Bronze — MinIO)]
