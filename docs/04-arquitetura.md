@@ -30,7 +30,7 @@ Por que não Lambda ou Kappa?
 ```mermaid
 flowchart TD
     subgraph Fontes
-        F1[Garbage Dataset\n13.348 imagens JPEG]
+        F1[Garbage Dataset\n12.259 imagens JPEG]
         F2[Câmeras Simuladas\nda Esteira]
     end
 
