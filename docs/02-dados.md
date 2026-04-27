@@ -2,10 +2,7 @@
 
 ## Fonte de Dados
 
-O projeto utiliza como única fonte primária real o Garbage Dataset, disponível publicamente no Kaggle (https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2):
-
-> "Managing Household Waste Through Transfer Learning" 
-> 13.348 imagens divididas em 10 classes de resíduos domésticos.
+O projeto utiliza como única fonte primária real o Garbage Dataset, disponível publicamente no [Kaggle](https://www.kaggle.com/datasets/sumn2u/garbage-classification-v2) contendo 13.348 imagens divididas em 10 classes de resíduos domésticos.
 
 Todos os metadados e eventos de streaming são gerados sinteticamente pelo próprio pipeline, o que é explicitamente documentado como prática comum em protótipos de engenharia de dados.
 
