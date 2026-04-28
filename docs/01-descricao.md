@@ -61,10 +61,11 @@ A partir das 10 classes do Garbage Dataset:
 
 ## Principais Stakeholders / Usuários Finais
 
-| Stakeholder | Interesse nos Dados |
-|---|---|
-| Gestores de coleta| Indicadores de volume reciclável vs. não reciclável por turno |
-| Operadores de esteira | Alertas em tempo real sobre categorias fora do padrão |
-| Pesquisadores / Analistas | Dados históricos para estudos de eficiência e melhoria de modelos |
-| Equipe de TI / Engenharia | Monitoramento da saúde do pipeline e qualidade dos dados |
-| Sistemas externos | Consumo dos indicadores via API REST |
+| Stakeholder | Domínio | Interesse nos Dados |
+|---|---|---|
+| Secretários / Gestores municipais | Gestão Municipal | Indicadores executivos de reciclabilidade e metas |
+| Coordenadores de rota | Coleta Seletiva | Volume reciclável por rota e frequência de coleta |
+| Operadores de esteira | Triagem e Separação | Classificação em tempo real e alertas de anomalia |
+| Analistas ambientais | Meio Ambiente e Sustentabilidade | Série histórica, taxa de reciclabilidade e relatórios de impacto |
+| Equipe de TI / Engenharia | Transversal | Saúde do pipeline e qualidade dos dados |
+| Sistemas externos | Transversal | Consumo dos indicadores via API REST |
