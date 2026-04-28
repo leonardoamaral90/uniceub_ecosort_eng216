@@ -30,10 +30,10 @@ Problemas específicos abordados:
 
 1. Construir um pipeline de ingestão batch a partir de imagens do Garbage Dataset
 2. Simular um fluxo de streaming representando câmeras de esteira em operação
-3. Processar e classificar cada resíduo como reciclável ou não reciclável via PySpark
+3. Processar e classificar cada resíduo como **reciclável** ou **não reciclável** via PySpark
 4. Garantir qualidade dos dados com Great Expectations
 5. Armazenar os dados em um Lakehouse com arquitetura Medalhão (Bronze → Silver → Gold)
-6. Disponibilizar indicadores operacionais via Metabase e API REST
+6. Disponibilizar indicadores operacionais via Metabase (com DuckDB como camada intermediária) e API REST (FastAPI)
 
 ---
 
@@ -55,7 +55,7 @@ A partir das 10 classes do Garbage Dataset:
 | Clothes | 1.892 | Não Reciclável |
 | **Total** | **12.259** | — |
 
-> Nota: Baterias possuem descarte especial na prática, mas para simplificação do protótipo são tratadas como não recicláveis no fluxo padrão.
+> Observação: Baterias possuem descarte especial na prática, mas para simplificação do protótipo são tratadas como não recicláveis no fluxo padrão.
 
 ---
 
