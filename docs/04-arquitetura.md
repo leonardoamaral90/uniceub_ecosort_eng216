@@ -7,10 +7,13 @@
 A arquitetura escolhida é um Lakehouse com organização em camadas Medalhão, executado localmente via Docker Compose.
 
 Por que Lakehouse?
+
 O projeto lida simultaneamente com dados não-estruturados (imagens JPEG) e estruturados (metadados e eventos gerados pelo pipeline). Um Data Warehouse tradicional não consegue armazenar imagens. Um Data Lake puro dificultaria a governança e a qualidade dos dados. O Lakehouse combina os dois: armazena qualquer tipo de dado (como o Data Lake) mas adiciona estrutura, qualidade e rastreabilidade nas camadas superiores (como o Data Warehouse), especialmente com o uso de Delta Lake nas camadas Silver e Gold.
 
 Por que Medalhão?
+
 O padrão Medalhão separa claramente as responsabilidades de cada etapa:
+
 - Bronze: dados brutos, sem modificação — preservados para reprocessamento a qualquer momento
 - Silver: dados limpos, validados (Great Expectations) e classificados (reciclável × não reciclável)
 - Gold: indicadores de negócio prontos para consumo — dashboards e API
@@ -59,7 +62,8 @@ flowchart TD
     end
 
     subgraph Consumo
-        C1[Metabase]
+        C1[DuckDB]
+        C2[Metabase]
         C2[API REST]
     end
 
@@ -78,7 +82,7 @@ flowchart TD
     S --> G1
     G1 --> G
     G --> C1
-    G --> C2
+    C1 --> C2
     O -.->|agenda e monitora| I1
     O -.->|agenda e monitora| P1
     O -.->|agenda e monitora| G1
@@ -99,7 +103,7 @@ Garbage Dataset (JPEG)
           → MinIO Silver (Delta Lake)
             → dbt (agregações)
               → MinIO Gold
-                → Metabase / API
+                → DuckDB → Metabase / FastAPI
 ```
 
 - Acionado pelo Prefect via flow agendado
