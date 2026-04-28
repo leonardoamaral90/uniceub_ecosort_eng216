@@ -3,7 +3,7 @@
 > Classificação Inteligente de Resíduos Urbanos
 
 **Integrantes:**
-- Leonardo Amaral — Matrícula: XXXXXXX
+- Leonardo Amaral — Matrícula: 22305363
 - Tatiana Hanada — Matrícula: 22301398
 
 ---
