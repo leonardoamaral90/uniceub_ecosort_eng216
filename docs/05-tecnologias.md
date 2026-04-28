@@ -74,7 +74,7 @@ O Iceberg seria mais adequado em ambientes multi-engine (Spark + Flink + Trino) 
 Tecnologia: Apache Spark (PySpark), rodando em modo `local[*]` via Docker
 
 Por que PySpark:
-O Spark é a ferramenta padrão para processamento distribuído de dados. Para o protótipo, o volume de 13k imagens não exige distribuição — mas o uso do PySpark demonstra a arquitetura correta para um sistema que, em produção, processaria milhões de eventos. O modo `local[*]` permite rodar sem cluster, consumindo apenas os recursos da máquina local.
+O Spark é a ferramenta padrão para processamento distribuído de dados. Para o protótipo, o volume de 12k imagens não exige distribuição — mas o uso do PySpark demonstra a arquitetura correta para um sistema que, em produção, processaria milhões de eventos. O modo `local[*]` permite rodar sem cluster, consumindo apenas os recursos da máquina local.
 
 O que o Spark faz (Bronze → Silver):
 - Lê os Parquets da Bronze
@@ -93,7 +93,7 @@ Por que Great Expectations:
 Great Expectations é a biblioteca padrão de validação de dados em Python. Permite definir "expectativas" sobre os dados (ex.: `class_label` não pode ser nulo, `recyclable` deve ser booleano, `confidence` deve estar entre 0 e 1) e executar essas validações automaticamente no pipeline. Se os dados não passarem nas validações, o pipeline é interrompido antes de promover dados inválidos para a Silver.
 
 Onde entra no pipeline:
-Entre o processamento PySpark e a escrita na Silver (portão de qualidade).
+Entre o processamento PySpark e a escrita na Silver — funciona como um "portão de qualidade".
 
 ---
 
@@ -154,8 +154,8 @@ Por que Metabase:
 Ferramenta de BI open-source que permite criar dashboards sem escrever código, ideal para o perfil dos stakeholders (gestores sem background técnico). Roda via Docker e conecta a fontes de dados estruturadas.
 
 Dashboards planejados:
-- Distribuição de resíduos por classe
-- Taxa de reciclabilidade geral e por turno
+- Distribuição de resíduos por classe (gráfico de barras)
+- Taxa de reciclabilidade geral e por turno (gauge + linha do tempo)
 - Volume de eventos de streaming ao longo do tempo
 - Alertas para classes fora do padrão esperado
 
@@ -177,7 +177,7 @@ Por que FastAPI e não Flask:
 |---|---|
 | Segurança | Credenciais via variáveis de ambiente (`.env`); sem senhas expostas no repositório |
 | Qualidade de dados | Great Expectations na Bronze → Silver; testes dbt na Silver → Gold |
-| Governança| Documentação gerada pelo dbt (`dbt docs generate`); dicionário de dados no README |
+| Governança | Documentação gerada pelo dbt (`dbt docs generate`); dicionário de dados no README |
 | Monitoramento | Prefect UI para flows; logs de cada etapa persistidos |
 | DataOps | Repositório versionado no GitHub; `docker-compose.yml` como infraestrutura como código |
 
@@ -200,11 +200,11 @@ graph TD
 
     I -->|leitura| J[DuckDB]
     J -->|SQL| K[Metabase\nDashboard]
-    I -->|endpoint| K[API REST\nFastAPI]
+    I -->|endpoint| M[API REST\nFastAPI]
 
-    L[Prefect\nOrquestração] -.->|agenda| A
-    L -.->|agenda| E
-    L -.->|agenda| H
+    N[Prefect\nOrquestração] -.->|agenda| A
+    N -.->|agenda| E
+    N -.->|agenda| H
 ```
 
 ---
