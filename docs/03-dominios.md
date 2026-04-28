@@ -1,54 +1,100 @@
 # 03 — Domínios e Serviços
 
+## Contexto de Negócio
+
+O EcoSort seria implantado em uma prefeitura ou cooperativa de triagem de resíduos urbanos. A organização é dividida em quatro domínios de negócio, cada um com seus próprios usuários, necessidades e forma de consumir os dados gerados pelo pipeline.
+
+---
+
 ## Domínios de Negócio
 
-O projeto é organizado em três domínios principais, refletindo o fluxo ponta a ponta do pipeline:
+### 1. Coleta Seletiva
 
----
+Setor: Equipes de coleta de resíduos e logística de rotas
 
-### 1. Domínio de Ingestão
+Quem usa: Agentes de coleta, motoristas, coordenadores de rota
 
-Responsabilidade: Capturar e registrar todos os dados de entrada — acervo histórico de imagens (batch) e eventos simulados das câmeras (streaming).
+Para quê: Entender quais regiões e rotas geram maior volume de material reciclável, otimizando a frequência e o trajeto das coletas.
 
-| Serviço | Responsabilidade |
+Como o EcoSort serve esse domínio:
+- Dados agregados por ponto de coleta e turno (camada Gold)
+- Indicadores de volume reciclável por região disponíveis via API REST
+
+| Serviço de Dados | Descrição |
 |---|---|
-| `batch-ingestion-service` | Lê as imagens do Garbage Dataset, gera metadados sintéticos e persiste na camada Bronze |
-| `stream-producer-service` | Simula câmeras de esteira publicando eventos JSON no Kafka |
-| `kafka-consumer-service` | Consome o tópico `residuos-eventos` e persiste os eventos na camada Bronze |
+| Volume por rota | Quantidade de itens recicláveis e não recicláveis registrados por ponto de origem |
+| Frequência de coleta | Indicador para ajustar a periodicidade das rotas com base no volume histórico |
 
 ---
 
-### 2. Domínio de Classificação e Qualidade
+### 2. Triagem e Separação
 
-Responsabilidade: Processar os dados brutos, garantir qualidade, aplicar as regras de negócio e transformar os dados para Silver e Gold.
+Setor: Operação das esteiras de separação de resíduos
 
-| Serviço | Responsabilidade |
+Quem usa: Operadores de esteira, supervisores de turno
+
+Para quê: Acompanhar em tempo real a classificação dos resíduos que passam pela esteira, identificar anomalias e garantir a eficiência da separação.
+
+Como o EcoSort serve esse domínio:
+- Eventos de classificação em tempo real via streaming (Kafka)
+- Alertas quando uma categoria fora do padrão é detectada
+- Painel operacional com volume classificado por turno (Metabase)
+
+| Serviço de Dados | Descrição |
 |---|---|
-| `spark-processing-service` | Lê a Bronze, executa limpeza e deduplicação via PySpark |
-| `classification-service` | Aplica a regra de negócio: `class_label` → `recyclable` (booleano) |
-| `quality-service` | Valida os dados com Great Expectations antes de promover para Silver |
-| `dbt-transformation-service` | Gera os modelos analíticos na camada Gold (agregações de negócio) |
+| Classificação em tempo real | Cada item é classificado como reciclável ou não reciclável ao passar pela câmera |
+| Painel de turno | Resumo do volume processado, taxa de reciclabilidade e alertas do turno atual |
 
 ---
 
-### 3. Domínio de Consumo
+### 3. Meio Ambiente e Sustentabilidade
 
-Responsabilidade: Disponibilizar os dados processados para usuários finais e sistemas externos.
+Setor: Área técnica responsável por indicadores ambientais e metas de sustentabilidade
 
-| Serviço | Responsabilidade |
+Quem usa: Analistas ambientais, técnicos de resíduos sólidos
+
+Para quê: Medir a taxa de reciclabilidade ao longo do tempo, gerar relatórios de impacto ambiental e acompanhar o cumprimento de metas estabelecidas pela legislação ou por acordos municipais.
+
+Como o EcoSort serve esse domínio:
+- Série histórica de classificações por classe de resíduo (camada Gold)
+- Taxa de reciclabilidade por período disponível no dashboard
+- Relatórios exportáveis para prestação de contas
+
+| Serviço de Dados | Descrição |
 |---|---|
-| `dashboard-service` | Conecta a camada Gold ao Metabase para visualização pelos gestores |
-| `api-service` | Expõe os indicadores Gold via API REST para integração com sistemas externos |
-| `monitoring-service` | Monitora a saúde do pipeline (Prefect UI + logs) |
+| Taxa de reciclabilidade | Percentual de itens recicláveis sobre o total processado por dia, semana ou mês |
+| Distribuição por classe | Volume de cada categoria (Metal, Plástico, Vidro, etc.) ao longo do tempo |
+| Relatório de impacto | Dados consolidados para relatórios de sustentabilidade e conformidade legal |
 
 ---
 
-### Serviços Compartilhados
+### 4. Gestão Municipal
+
+Setor: Secretaria de meio ambiente ou empresa concessionária responsável pelo serviço
+
+Quem usa: Gestores, secretários, diretores
+
+Para quê: Tomar decisões estratégicas sobre investimentos em infraestrutura, definição de metas, renovação de contratos e prestação de contas à população.
+
+Como o EcoSort serve esse domínio:
+- Dashboard executivo com indicadores consolidados (Metabase)
+- API REST para integração com sistemas municipais (ex: portal de transparência)
+
+| Serviço de Dados | Descrição |
+|---|---|
+| Indicadores executivos | Taxa de reciclabilidade geral, evolução mensal, comparativo entre períodos |
+| Integração externa | Exposição dos dados via API para sistemas de gestão municipal |
+
+---
+
+## Serviços Compartilhados entre Domínios
 
 | Serviço | Usado por |
 |---|---|
-| `storage-service` (MinIO) | Todos os domínios — armazena Bronze, Silver e Gold |
-| `orchestration-service` (Prefect) | Ingestão e Classificação — agenda e monitora os jobs |
+| Armazenamento (MinIO — Bronze, Silver, Gold) | Todos os domínios |
+| Processamento (PySpark) | Triagem e Separação, Meio Ambiente |
+| Orquestração (Prefect) | Todos os domínios — garante que os dados estejam sempre atualizados |
+| Monitoramento (Prefect UI + GE Data Docs) | Triagem e Separação, Meio Ambiente |
 
 ---
 
@@ -56,80 +102,74 @@ Responsabilidade: Disponibilizar os dados processados para usuários finais e si
 
 ```mermaid
 graph TD
-    subgraph Ingestão
-        A1[batch-ingestion-service]
-        A2[stream-producer-service]
-        A3[kafka-consumer-service]
+    subgraph Coleta Seletiva
+        CS1[Volume por rota]
+        CS2[Frequência de coleta]
     end
 
-    subgraph Classificação e Qualidade
-        B1[spark-processing-service]
-        B2[classification-service]
-        B3[quality-service\nGreat Expectations]
-        B4[dbt-transformation-service]
+    subgraph Triagem e Separação
+        TS1[Classificação em tempo real\nKafka + Streaming]
+        TS2[Painel de turno\nMetabase]
     end
 
-    subgraph Consumo
-        C1[dashboard-service\nMetabase]
-        C2[api-service\nAPI REST]
-        C3[monitoring-service]
+    subgraph Meio Ambiente e Sustentabilidade
+        MA1[Taxa de reciclabilidade]
+        MA2[Distribuição por classe]
+        MA3[Relatório de impacto]
     end
 
-    subgraph Compartilhados
-        S1[(MinIO\nBronze · Silver · Gold)]
-        S2[Prefect\norquestração]
+    subgraph Gestão Municipal
+        GM1[Indicadores executivos\nMetabase]
+        GM2[Integração externa\nFastAPI]
     end
 
-    A1 -->|Bronze| S1
-    A2 --> A3
-    A3 -->|Bronze| S1
-    S1 --> B1
-    B1 --> B2
-    B2 --> B3
-    B3 -->|Silver| S1
-    S1 --> B4
-    B4 -->|Gold| S1
-    S1 --> C1
-    S1 --> C2
-    S2 -.->|agenda| A1
-    S2 -.->|agenda| B1
-    S2 -.->|agenda| B4
-    C3 -.->|monitora| S2
+    subgraph Pipeline EcoSort
+        P1[(Bronze\nDados brutos)]
+        P2[(Silver\nDados classificados)]
+        P3[(Gold\nIndicadores)]
+    end
+
+    P1 --> P2 --> P3
+    P3 --> CS1
+    P3 --> CS2
+    P2 --> TS1
+    P3 --> TS2
+    P3 --> MA1
+    P3 --> MA2
+    P3 --> MA3
+    P3 --> GM1
+    P3 --> GM2
 ```
 
 ---
 
-## Fluxo entre Domínios
+## Como Cada Domínio Consome os Dados
 
 ```mermaid
 flowchart LR
-    subgraph Fontes Externas
-        F1[Garbage Dataset]
-        F2[Câmera Simulada]
+    subgraph Fontes
+        F1[Garbage Dataset\nbatch]
+        F2[Câmeras\nstreaming]
     end
 
-    subgraph Ingestão
-        D1[Batch Ingestion]
-        D2[Stream Producer → Kafka]
+    subgraph Pipeline
+        B[(Bronze)]
+        S[(Silver)]
+        G[(Gold)]
     end
 
-    subgraph Classificação e Qualidade
-        E1[PySpark\nProcessamento]
-        E2[Great Expectations\nQualidade]
-        E3[dbt\nAgregações Gold]
+    subgraph Domínios
+        D1[Coleta Seletiva\nAPI REST]
+        D2[Triagem e Separação\nStreaming + Metabase]
+        D3[Meio Ambiente\nMetabase + Relatórios]
+        D4[Gestão Municipal\nMetabase + API REST]
     end
 
-    subgraph Consumo
-        G1[Metabase\nDashboard]
-        G2[API REST]
-    end
-
-    F1 --> D1
-    F2 --> D2
-    D1 -->|Bronze| E1
-    D2 -->|Bronze| E1
-    E1 --> E2
-    E2 -->|Silver| E3
-    E3 -->|Gold| G1
-    E3 -->|Gold| G2
+    F1 --> B
+    F2 --> B
+    B --> S --> G
+    G --> D1
+    S --> D2
+    G --> D3
+    G --> D4
 ```
