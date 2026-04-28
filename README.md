@@ -4,7 +4,7 @@
 
 **Integrantes:**
 - Leonardo Amaral — Matrícula: XXXXXXX
-- Tatiana Hanadda — Matrícula: 22301398
+- Tatiana Hanada — Matrícula: 22301398
 
 ---
 
@@ -63,8 +63,9 @@ flowchart LR
     H --> I[dbt\nTransformações de Negócio]
     I --> J[(Gold\nIndicadores Operacionais)]
 
-    J --> K[Metabase]
-    J --> L[API]
+    J --> K[DuckDB]
+    K --> L[Metabase]
+    J --> M[API\nFastAPI]
 ```
 
 ---
@@ -80,6 +81,6 @@ flowchart LR
 | Qualidade de Dados | Great Expectations |
 | Transformação Analítica | dbt |
 | Orquestração | Prefect |
-| Consumo | Metabase + API |
+| Consumo | DuckDB + Metabase + FastAPI |
 
 > Toda a stack roda localmente via Docker Compose, sem dependência de serviços em nuvem pagos.
