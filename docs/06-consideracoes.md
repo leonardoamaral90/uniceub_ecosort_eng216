@@ -3,9 +3,9 @@
 ## Principais Riscos e Limitações
 | Risco / Limitação | Impacto | Mitigação |
 |---|---|---|
-| Recursos de máquina | Kafka + Spark + Prefect + MinIO + Metabase rodando juntos pode ser pesado | Usar Spark em modo `local[2]`; desligar serviços não necessários durante testes; Prefect é mais leve e já está escolhido |
-| Kafka em ambiente local | Configuração com Zookeeper pode apresentar instabilidades | Usar imagem `bitnami/kafka`; considerar substituir por Redpanda (mais leve, compatível com API Kafka) se necessário |
-| Great Expectations + Spark | A integração entre GE e PySpark exige configuração adicional | Usar GE em modo Pandas (após coletar uma amostra) como alternativa mais simples |
+| Recursos de máquina | Kafka + Spark + Prefect + MinIO + Metabase rodando juntos pode ser pesado | Usar Spark em modo `local[2]` (2 núcleos do processador); desligar serviços não necessários durante testes |
+| Kafka em ambiente local | Configuração com Zookeeper pode apresentar instabilidades | Utilizar imagem Docker mais simples do Kafka (bitnami) ou trocar por Redpanda (faz a mesma coisa que o Kafka mas sem precisar do Zookeeper) |
+| Great Expectations + Spark | A integração entre GE e PySpark exige configuração adicional | Usar uma amostra pequena dos dados do Spark, converter para Pandas, e depois validar — mais simples, mesmo que menos escalável |
 | Metabase com Parquet/Delta | A versão open-source do Metabase não lê Parquet diretamente | Usar DuckDB como camada intermediária entre os arquivos Gold e o Metabase |
 | Dados sintéticos | O streaming é simulado — o projeto não valida o comportamento com câmeras reais | Documentado explicitamente; o foco é o pipeline de dados, não o hardware |
 
