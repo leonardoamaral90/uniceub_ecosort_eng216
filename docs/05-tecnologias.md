@@ -73,7 +73,7 @@ O Iceberg seria mais adequado em ambientes multi-engine (Spark + Flink + Trino) 
 Tecnologia: Apache Spark (PySpark), rodando em modo `local[*]` via Docker
 
 Por que PySpark:
-O Spark é a ferramenta padrão para processamento distribuído de dados. Para o protótipo, o volume de 13k imagens não exige distribuição — mas o uso do PySpark demonstra a arquitetura correta para um sistema que, em produção, processaria milhões de eventos. O modo `local[*]` permite rodar sem cluster, consumindo apenas os recursos da máquina local.
+O Spark é a ferramenta padrão para processamento distribuído de dados. Para o protótipo, o volume de 12k imagens não exige distribuição — mas o uso do PySpark demonstra a arquitetura correta para um sistema que, em produção, processaria milhões de eventos. O modo `local[*]` permite rodar sem cluster, consumindo apenas os recursos da máquina local.
 
 O que o Spark faz (Bronze → Silver):
 - Lê os Parquets da Bronze
