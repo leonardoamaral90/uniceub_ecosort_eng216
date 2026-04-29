@@ -78,7 +78,7 @@ Para quê: Tomar decisões estratégicas sobre investimentos em infraestrutura, 
 
 Como o EcoSort serve esse domínio:
 - Dashboard executivo com indicadores consolidados (Metabase)
-- API REST para integração com sistemas municipais (ex: portal de transparência)
+- API REST para integração com sistemas municipais (ex.: portal de transparência)
 
 | Serviço de Dados | Descrição |
 |---|---|
@@ -102,74 +102,37 @@ Como o EcoSort serve esse domínio:
 
 ```mermaid
 graph TD
-    subgraph Coleta Seletiva
+    subgraph CS[Coleta Seletiva]
         CS1[Volume por rota]
         CS2[Frequência de coleta]
     end
 
-    subgraph Triagem e Separação
-        TS1[Classificação em tempo real\nKafka + Streaming]
-        TS2[Painel de turno\nMetabase]
+    subgraph TS[Triagem e Separação]
+        TS1[Classificação de resíduos]
+        TS2[Alertas de anomalia]
+        TS3[Painel de turno]
     end
 
-    subgraph Meio Ambiente e Sustentabilidade
+    subgraph MA[Meio Ambiente e Sustentabilidade]
         MA1[Taxa de reciclabilidade]
         MA2[Distribuição por classe]
-        MA3[Relatório de impacto]
+        MA3[Relatório de impacto ambiental]
     end
 
-    subgraph Gestão Municipal
-        GM1[Indicadores executivos\nMetabase]
-        GM2[Integração externa\nFastAPI]
+    subgraph GM[Gestão Municipal]
+        GM1[Indicadores executivos]
+        GM2[Prestação de contas]
+        GM3[Integração com sistemas municipais]
     end
 
-    subgraph Pipeline EcoSort
-        P1[(Bronze\nDados brutos)]
-        P2[(Silver\nDados classificados)]
-        P3[(Gold\nIndicadores)]
+    subgraph SC[Serviços Compartilhados]
+        SC1[Armazenamento de dados]
+        SC2[Processamento e transformação]
+        SC3[Orquestração e monitoramento]
     end
 
-    P1 --> P2 --> P3
-    P3 --> CS1
-    P3 --> CS2
-    P2 --> TS1
-    P3 --> TS2
-    P3 --> MA1
-    P3 --> MA2
-    P3 --> MA3
-    P3 --> GM1
-    P3 --> GM2
-```
-
----
-
-## Como Cada Domínio Consome os Dados
-
-```mermaid
-flowchart LR
-    subgraph Fontes
-        F1[Garbage Dataset\nbatch]
-        F2[Câmeras\nstreaming]
-    end
-
-    subgraph Pipeline
-        B[(Bronze)]
-        S[(Silver)]
-        G[(Gold)]
-    end
-
-    subgraph Domínios
-        D1[Coleta Seletiva\nAPI REST]
-        D2[Triagem e Separação\nStreaming + Metabase]
-        D3[Meio Ambiente\nMetabase + Relatórios]
-        D4[Gestão Municipal\nMetabase + API REST]
-    end
-
-    F1 --> B
-    F2 --> B
-    B --> S --> G
-    G --> D1
-    S --> D2
-    G --> D3
-    G --> D4
+    SC --> CS
+    SC --> TS
+    SC --> MA
+    SC --> GM
 ```
