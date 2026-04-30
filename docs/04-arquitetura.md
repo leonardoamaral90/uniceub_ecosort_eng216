@@ -4,7 +4,7 @@
 
 ### Lakehouse com Padrão Medalhão (Bronze → Silver → Gold)
 
-A arquitetura escolhida é um Lakehouse com organização em camadas Medalhão, executado localmente via Docker Compose.
+A arquitetura escolhida é um **Lakehouse** com organização em camadas Medalhão, executado localmente via Docker Compose.
 
 Por que Lakehouse?
 
@@ -14,9 +14,9 @@ Por que Medalhão?
 
 O padrão Medalhão separa claramente as responsabilidades de cada etapa:
 
-- Bronze: dados brutos, sem modificação — preservados para reprocessamento a qualquer momento
-- Silver: dados limpos, validados (Great Expectations) e classificados (reciclável × não reciclável)
-- Gold: indicadores de negócio prontos para consumo — dashboards e API
+- **Bronze:** dados brutos, sem modificação — preservados para reprocessamento a qualquer momento
+- **Silver:** dados limpos, validados (Great Expectations) e classificados (reciclável × não reciclável)
+- **Gold:** indicadores de negócio prontos para consumo — dashboards e API
 
 Essa separação garante reversibilidade: se uma regra de negócio mudar, basta reprocessar da Bronze sem perda de dados.
 
@@ -63,12 +63,19 @@ flowchart TD
 
     subgraph Consumo
         C1[DuckDB]
-        C2[Metabase]
-        C2[API REST]
+        C2[Metabase
+Dashboard Gestores]
     end
 
     subgraph Orquestração
         O[Prefect]
+    end
+
+    subgraph Monitoramento
+        M1[Prefect UI
+Saúde do Pipeline]
+        M2[GE Data Docs
+Qualidade dos Dados]
     end
 
     F1 -->|lote de imagens| I1
@@ -83,9 +90,11 @@ flowchart TD
     G1 --> G
     G --> C1
     C1 --> C2
-    O -.->|agenda e monitora| I1
-    O -.->|agenda e monitora| P1
-    O -.->|agenda e monitora| G1
+    O -.->|agenda| I1
+    O -.->|agenda| P1
+    O -.->|agenda| G1
+    O -.->|alimenta| M1
+    P3 -.->|relata| M2
 ```
 
 ---
@@ -103,7 +112,7 @@ Garbage Dataset (JPEG)
           → MinIO Silver (Delta Lake)
             → dbt (agregações)
               → MinIO Gold
-                → DuckDB → Metabase / FastAPI
+                → DuckDB → Metabase 
 ```
 
 - Acionado pelo Prefect via flow agendado
