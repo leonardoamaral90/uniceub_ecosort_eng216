@@ -16,7 +16,7 @@ O EcoSort simula o backend de dados de um sistema de triagem automática instala
 
 ## Problema que o Projeto Pretende Resolver
 
-> Como classificar automaticamente resíduos domésticos em recicláveis e não recicláveis, e disponibilizar indicadores operacionais confiáveis para apoiar a gestão de coleta seletiva?
+> **Como classificar automaticamente resíduos domésticos em recicláveis e não recicláveis, e disponibilizar indicadores operacionais confiáveis para apoiar a gestão de coleta seletiva?**
 
 Problemas específicos abordados:
 
@@ -30,10 +30,10 @@ Problemas específicos abordados:
 
 1. Construir um pipeline de ingestão batch a partir de imagens do Garbage Dataset
 2. Simular um fluxo de streaming representando câmeras de esteira em operação
-3. Processar e classificar cada resíduo como **reciclável** ou **não reciclável** via PySpark
+3. Processar e classificar cada resíduo como reciclável ou não reciclável via PySpark
 4. Garantir qualidade dos dados com Great Expectations
 5. Armazenar os dados em um Lakehouse com arquitetura Medalhão (Bronze → Silver → Gold)
-6. Disponibilizar indicadores operacionais via Metabase (com DuckDB como camada intermediária) e API REST (FastAPI)
+6. Disponibilizar indicadores operacionais via Metabase (com DuckDB como camada intermediária)
 
 ---
 
@@ -55,7 +55,7 @@ A partir das 10 classes do Garbage Dataset:
 | Clothes | 1.892 | Não Reciclável |
 | **Total** | **12.259** | — |
 
-> Observação: Baterias possuem descarte especial na prática, mas para simplificação do protótipo são tratadas como não recicláveis no fluxo padrão.
+> **Nota:** Baterias possuem descarte especial na prática, mas para simplificação do protótipo são tratadas como não recicláveis no fluxo padrão.
 
 ---
 
@@ -68,4 +68,3 @@ A partir das 10 classes do Garbage Dataset:
 | Operadores de esteira | Triagem e Separação | Classificação em tempo real e alertas de anomalia |
 | Analistas ambientais | Meio Ambiente e Sustentabilidade | Série histórica, taxa de reciclabilidade e relatórios de impacto |
 | Equipe de TI / Engenharia | Transversal | Saúde do pipeline e qualidade dos dados |
-| Sistemas externos | Transversal | Consumo dos indicadores via API REST |
