@@ -18,7 +18,6 @@ Para quê: Entender quais regiões e rotas geram maior volume de material recicl
 
 Como o EcoSort serve esse domínio:
 - Dados agregados por ponto de coleta e turno (camada Gold)
-- Indicadores de volume reciclável por região disponíveis via API REST
 
 | Serviço de Dados | Descrição |
 |---|---|
@@ -78,7 +77,6 @@ Para quê: Tomar decisões estratégicas sobre investimentos em infraestrutura, 
 
 Como o EcoSort serve esse domínio:
 - Dashboard executivo com indicadores consolidados (Metabase)
-- API REST para integração com sistemas municipais (ex.: portal de transparência)
 
 | Serviço de Dados | Descrição |
 |---|---|
