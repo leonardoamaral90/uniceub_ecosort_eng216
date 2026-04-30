@@ -2,7 +2,7 @@
 
 ## Visão Geral da Stack
 
-Toda a stack é executada localmente via Docker Compose, sem dependência de serviços em nuvem pagos. A escolha por ferramentas open-source é intencional: permite que o projeto rode em qualquer máquina e que a Parte 2 (implementação) seja viável sem custos adicionais.
+Toda a stack é executada localmente via **Docker Compose**, sem dependência de serviços em nuvem pagos. A escolha por ferramentas open-source é intencional: permite que o projeto rode em qualquer máquina do laboratório e que a Parte 2 (implementação) seja viável sem custos adicionais.
 
 ---
 
@@ -29,8 +29,8 @@ Por que Kafka:
 Kafka é o padrão de mercado para ingestão de eventos em streaming. Ele desacopla completamente o produtor (câmera/simulador) do consumidor (pipeline), garantindo que eventos não sejam perdidos mesmo que o consumer esteja temporariamente indisponível. O Kafka também permite **replay** de mensagens — essencial para reprocessar a Bronze em caso de falha.
 
 Alternativas consideradas:
-- RabbitMQ: mais simples, mas sem replay de mensagens e persistência limitada
-- Redis Streams: mais leve, mas menos representativo de uma arquitetura de produção real
+- **RabbitMQ:** mais simples, mas sem replay de mensagens e persistência limitada
+- **Redis Streams:** mais leve, mas menos representativo de uma arquitetura de produção real
 
 Como funciona:
 - Producer Python sorteia imagens do dataset e publica eventos JSON no tópico `residuos-eventos`
@@ -61,7 +61,7 @@ O Delta Lake é um formato de tabela open-source que adiciona capacidades de ban
 A escolha do Delta Lake em detrimento do Apache Iceberg se justifica por:
 
 - Integração nativa com PySpark — criado pela Databricks, o mesmo time do Spark; funciona via pacote `delta-spark`, sem configuração extra de catálogo
-- Configuração mais simples localmente — o Iceberg exige configuração elaborada de catálogo (Hive Metastore ou similar); o Delta Lake funciona diretamente sobre o MinIO
+- Configuração mais simples localmente** — o Iceberg exige configuração elaborada de catálogo (Hive Metastore ou similar); o Delta Lake funciona diretamente sobre o MinIO
 - Documentação abundante — a combinação PySpark + Delta Lake é amplamente documentada; mais fácil encontrar referências e resolver problemas
 - Ecossistema coerente — toda a stack já usa o ecossistema Spark/Python; Delta Lake se encaixa naturalmente
 
@@ -74,7 +74,7 @@ O Iceberg seria mais adequado em ambientes multi-engine (Spark + Flink + Trino) 
 Tecnologia: Apache Spark (PySpark), rodando em modo `local[*]` via Docker
 
 Por que PySpark:
-O Spark é a ferramenta padrão para processamento distribuído de dados. Para o protótipo, o volume de 12k imagens não exige distribuição — mas o uso do PySpark demonstra a arquitetura correta para um sistema que, em produção, processaria milhões de eventos. O modo `local[*]` permite rodar sem cluster, consumindo apenas os recursos da máquina local.
+O Spark é a ferramenta padrão para processamento distribuído de dados. Para o protótipo, o volume de 13k imagens não exige distribuição — mas o uso do PySpark demonstra a arquitetura correta para um sistema que, em produção, processaria milhões de eventos. O modo `local[*]` permite rodar sem cluster, consumindo apenas os recursos da máquina local.
 
 O que o Spark faz (Bronze → Silver):
 - Lê os Parquets da Bronze
@@ -126,14 +126,14 @@ O Prefect é um orquestrador moderno de pipelines de dados. Para o contexto dest
 
 O Airflow seria a escolha mais adequada em um ambiente de produção corporativo, onde seu ecossistema maduro de conectores e operadores justifica o custo operacional adicional. Para um protótipo local, o Prefect é mais pragmático.
 
-Flows planejados:
+**Flows planejados:**
 - `flow_batch_ingestion` — aciona o script Python de ingestão batch
 - `flow_spark_transform` — executa o job PySpark (Bronze → Silver) após a ingestão
 - `flow_dbt_gold` — executa os modelos dbt após o Spark (Silver → Gold)
 
 ---
 
-## 8. Consumo — DuckDB + Metabase + FastAPI
+## 8. Consumo — DuckDB + Metabase
 
 ### DuckDB — camada intermediária
 
@@ -159,15 +159,6 @@ Dashboards planejados:
 - Volume de eventos de streaming ao longo do tempo
 - Alertas para classes fora do padrão esperado
 
-### API REST — FastAPI
-
-Uma API REST construída com FastAPI que expõe os indicadores da camada Gold para sistemas externos — representando um caso de uso real onde um sistema de gestão municipal consumiria os dados do pipeline.
-
-Por que FastAPI e não Flask:
-- Documentação automática — gera Swagger UI (`/docs`) sem configuração extra, útil para demonstrar a API na apresentação
-- Mais performático — baseado em async nativo (ASGI), mais rápido que o Flask (WSGI) para servir múltiplas requisições
-- Validação integrada — usa Pydantic para validar e serializar os dados retornados, mais robusto para uma API que serve indicadores de um pipeline
-- Padrão moderno — FastAPI é hoje a escolha predominante para novas APIs Python no mercado
 
 ---
 
@@ -179,7 +170,7 @@ Por que FastAPI e não Flask:
 | Qualidade de dados | Great Expectations na Bronze → Silver; testes dbt na Silver → Gold |
 | Governança | Documentação gerada pelo dbt (`dbt docs generate`); dicionário de dados no README |
 | Monitoramento | Prefect UI para flows; logs de cada etapa persistidos |
-| DataOps | Repositório versionado no GitHub; `docker-compose.yml` como infraestrutura como código |
+| DataOps| Repositório versionado no GitHub; `docker-compose.yml` como infraestrutura como código |
 
 ---
 
@@ -200,7 +191,6 @@ graph TD
 
     I -->|leitura| J[DuckDB]
     J -->|SQL| K[Metabase\nDashboard]
-    I -->|endpoint| M[API REST\nFastAPI]
 
     N[Prefect\nOrquestração] -.->|agenda| A
     N -.->|agenda| E
@@ -219,7 +209,6 @@ services:
   spark:          # processamento PySpark
   prefect:        # orquestração
   metabase:       # dashboard para gestores
-  api:            # API REST (FastAPI)
 ```
 
 O ambiente completo pode ser iniciado com um único comando:
@@ -254,3 +243,7 @@ O Great Expectations gera automaticamente um site estático (Data Docs) após ca
 - Histórico de qualidade ao longo do tempo
 
 É a camada de monitoramento da qualidade dos dados — garante que problemas nos dados sejam detectados antes de contaminar as camadas Silver e Gold.
+
+### Por que não Grafana?
+
+O Grafana seria a escolha ideal em produção, pois centraliza métricas de infraestrutura (CPU, memória, Kafka lag, Spark jobs) em dashboards unificados. No entanto, exige a configuração adicional do Prometheus como coletor de métricas e exporters para cada serviço — o que aumentaria significativamente a complexidade do `docker-compose.yml` local. Para o protótipo, o Prefect UI + GE Data Docs cobre as necessidades de observabilidade com zero configuração extra. O Grafana é documentado como evolução natural para a Parte 2 ou para um ambiente de produção.
