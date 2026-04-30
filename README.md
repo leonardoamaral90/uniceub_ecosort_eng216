@@ -65,7 +65,6 @@ flowchart LR
 
     J --> K[DuckDB]
     K --> L[Metabase]
-    J --> M[API\nFastAPI]
 ```
 
 ---
@@ -81,6 +80,6 @@ flowchart LR
 | Qualidade de Dados | Great Expectations |
 | Transformação Analítica | dbt |
 | Orquestração | Prefect |
-| Consumo | DuckDB + Metabase + FastAPI |
+| Consumo | DuckDB + Metabase |
 
 > Toda a stack roda localmente via Docker Compose, sem dependência de serviços em nuvem pagos.
