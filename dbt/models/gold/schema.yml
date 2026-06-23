@@ -1,0 +1,35 @@
+version: 2
+
+models:
+  - name: _silver_source
+    description: "View técnica com a camada Silver exportada em Parquet."
+    columns:
+      - name: class_label
+        tests:
+          - not_null
+      - name: recyclable
+        tests:
+          - not_null
+
+  - name: fct_residuos_por_classe
+    description: "Total de resíduos por classe e reciclabilidade."
+    columns:
+      - name: class_label
+        tests:
+          - not_null
+      - name: total_itens
+        tests:
+          - not_null
+
+  - name: fct_taxa_reciclabilidade
+    description: "Taxa geral de reciclabilidade."
+    columns:
+      - name: taxa_reciclabilidade_pct
+        tests:
+          - not_null
+
+  - name: fct_volume_por_turno
+    description: "Volume de resíduos por turno simulado."
+
+  - name: fct_serie_temporal
+    description: "Série temporal de eventos/processamentos por hora."

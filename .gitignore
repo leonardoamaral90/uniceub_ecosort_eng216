@@ -1,0 +1,6 @@
+.env
+kaggle/kaggle.json
+data/
+__pycache__/
+*.pyc
+.metabase/

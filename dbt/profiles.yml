@@ -1,0 +1,7 @@
+ecosort:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "/data/duckdb/ecosort.duckdb"
+      threads: 2
