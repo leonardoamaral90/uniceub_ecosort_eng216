@@ -137,7 +137,7 @@ services:
       - "3000:3000"
     volumes:
       - metabase-data:/metabase-data
-      - ./data/duckdb:/data/duckdb:ro
+      - ./data/duckdb:/data/duckdb
     restart: unless-stopped
 
   kafka-producer:
